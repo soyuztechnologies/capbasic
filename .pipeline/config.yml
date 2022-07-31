@@ -1,0 +1,44 @@
+---
+general:
+  buildTool: "mta"
+
+stages:
+  Build:
+    mavenExecuteStaticCodeChecks: false
+    npmExecuteLint: true
+
+  Additional Unit Tests:
+    npmExecuteScripts: false
+    karmaExecuteTests: false
+
+  Acceptance:
+    cloudFoundryDeploy: false
+    cfApiEndpoint: "<%= cfapi %>"
+    cfOrg: "b209b9abtrial"
+    cfSpace: "dev"
+    cfAppName: "capbasic"
+    cfCredentialsId: "deploy-to-cf"
+    uiVeri5ExecuteTests: false
+
+  Release:
+    cloudFoundryDeploy: true
+    cfApiEndpoint: "<%= cfapi %>"
+    cfOrg: "b209b9abtrial"
+    cfSpace: "dev"
+    cfAppName: "capbasic"
+    cfCredentialsId: "deploy-to-cf"
+    tmsUpload: false
+
+steps:
+  artifactPrepareVersion:
+    versioningType: "cloud_noTag"
+
+  npmExecuteLint:
+    failOnError: true
+
+  cloudFoundryDeploy:
+    mtaDeployParameters: "-f --version-rule ALL"
+
+  tmsUpload:
+    nodeName: "qa"
+    credentialsId: "tms-sk"
